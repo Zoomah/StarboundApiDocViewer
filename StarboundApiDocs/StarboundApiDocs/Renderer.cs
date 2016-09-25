@@ -1,10 +1,5 @@
 ﻿using Markdig;
-using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace StarboundApiDocs {
   class Renderer {
@@ -709,7 +704,7 @@ namespace StarboundApiDocs {
       border-bottom-color: #eee;
     }
 	</style>
-</head><body>
+</head><body oncontextmenu=""return false;"">
 	<div class=""markdown-body""><%CONTENT%></div>
 </body>
 </html>";

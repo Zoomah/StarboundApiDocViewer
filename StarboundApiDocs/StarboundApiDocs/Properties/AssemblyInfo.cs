@@ -7,11 +7,11 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("StarboundApiDocs")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("StarboundApiDocViewer")]
+[assembly: AssemblyDescription("Small Application to view Starbounds API help files")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("StarboundApiDocs")]
+[assembly: AssemblyCompany("Zoomah")]
+[assembly: AssemblyProduct("StarboundApiDocViewer")]
 [assembly: AssemblyCopyright("Copyright ©  2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
