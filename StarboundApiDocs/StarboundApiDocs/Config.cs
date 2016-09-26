@@ -3,7 +3,7 @@ using System.Runtime.Serialization.Json;
 using System.IO;
 using System.Reflection;
 
-namespace StarboundApiDocs {
+namespace StarboundApiDocViewer {
   [DataContract]
   class Config {
     private Config() {}

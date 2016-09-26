@@ -73,7 +73,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Config.cs" />
-    <Compile Include="Renderer.cs" />
+    <Compile Include="ViewTemplate.cs" />
     <Compile Include="MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -83,20 +83,11 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <None Include="app.manifest" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -116,6 +107,24 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Images\sb.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\settings.png" />
+    <Resource Include="Images\zoom_in.png" />
+    <Resource Include="Images\zoom_out.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Template\script.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Template\gitlike.css" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\down.png" />
+    <Resource Include="Images\up.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Template\template.html" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

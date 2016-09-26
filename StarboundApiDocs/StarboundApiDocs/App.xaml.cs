@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace StarboundApiDocs {
+namespace StarboundApiDocViewer {
   /// <summary>
   /// Interaction logic for App.xaml
   /// </summary>

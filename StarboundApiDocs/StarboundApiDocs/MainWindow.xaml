@@ -4,45 +4,88 @@
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
   xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
   xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-  xmlns:local="clr-namespace:StarboundApiDocs"
-  xmlns:Custom="http://schemas.awesomium.com/winfx" x:Class="StarboundApiDocs.MainWindow"
-  mc:Ignorable="d" Closing="WindowClosing">
+  xmlns:local="clr-namespace:StarboundApiDocViewer"
+  xmlns:Custom="http://schemas.awesomium.com/winfx" x:Class="StarboundApiDocViewer.MainWindow"
+  mc:Ignorable="d" Closing="WindowClosing" ResizeMode="CanResizeWithGrip">
 
-  <Window.Resources>
-    <DataTemplate x:Key="mdFileTemplate">
-      <Grid Margin="2">
-        <Grid.ColumnDefinitions>
-          <ColumnDefinition Width="20"/>
-          <ColumnDefinition Width="Auto"/>
-        </Grid.ColumnDefinitions>
-        <Image Source="Images/markdown.png" Margin="0,0,3,0"/>
-        <TextBlock Grid.Column="1"  ToolTip="{Binding DisplayName}" TextWrapping="NoWrap"  Text="{Binding DisplayName}"/>
-      </Grid>
-    </DataTemplate>
-  </Window.Resources>
+	<Window.Resources>
+		<!-- Listbox Item template for md files -->
+		<DataTemplate x:Key="mdFileTemplate">
+			<Grid Margin="2">
+				<Grid.ColumnDefinitions>
+					<ColumnDefinition Width="20"/>
+					<ColumnDefinition Width="Auto"/>
+				</Grid.ColumnDefinitions>
+				<Image Source="Images/markdown.png" Margin="0,0,3,0"/>
+				<TextBlock Grid.Column="1"  ToolTip="{Binding DisplayName}" TextWrapping="NoWrap"  Text="{Binding DisplayName}"/>
+			</Grid>
+		</DataTemplate>
+		<!-- Base commands -->
+		<RoutedUICommand x:Key="GotoSearch" Text=""/>
+		<RoutedUICommand x:Key="Search" Text=""/>
+		<RoutedUICommand x:Key="Clear" Text=""/>
+		<RoutedUICommand x:Key="SearchNext" Text=""/>
+		<RoutedUICommand x:Key="SearchPrev" Text=""/>
+	</Window.Resources>
+	
+	<!-- Codebindings for hotkeys -->
+	<Window.CommandBindings>
+		<CommandBinding Command="{StaticResource GotoSearch}" Executed="GotoSearch"/>
+		<CommandBinding Command="{StaticResource Search}" Executed="Search"/>
+		<CommandBinding Command="{StaticResource Clear}" Executed="Clear"/>
+		<CommandBinding Command="{StaticResource SearchNext}" Executed="SearchNext"/>
+		<CommandBinding Command="{StaticResource SearchPrev}" Executed="SearchPrev"/>
+	</Window.CommandBindings>
+	
+	<Window.InputBindings>
+		<KeyBinding Modifiers="Ctrl" Key="F" Command="{StaticResource GotoSearch}"/>
+		
+		<KeyBinding Key="F3" Command="{StaticResource SearchNext}"/>
+		<KeyBinding Modifiers="Shift" Key="F3" Command="{StaticResource SearchPrev}"/>
+		<KeyBinding Key="Esc" Command="{StaticResource Clear}"/>
+	</Window.InputBindings>
+	
+	<Grid Margin="1" x:Name="mainGrid">
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition x:Name="leftCol" Width="0.25*"/>
+			<ColumnDefinition x:Name ="rightCol" Width="0.75*"/>
+		</Grid.ColumnDefinitions>
 
-  <Grid Margin="1" x:Name="mainGrid">
-    <Grid.ColumnDefinitions>
-      <ColumnDefinition x:Name="leftCol" Width="0.25*"/>
-      <ColumnDefinition x:Name ="rightCol" Width="0.75*"/>
-    </Grid.ColumnDefinitions>
+		<Label x:Name="mdCurrent" Content="no file selected" FontSize="14" FontWeight="Bold" Grid.Column="1" VerticalAlignment="Top"  Margin="30,2,29,0" Padding="0"/>
 
-    <Label x:Name="mdCurrent" Content="no file selected" FontSize="14" FontWeight="Bold" Grid.Column="1" VerticalAlignment="Top"  Margin="30,2,2,0" Padding="0"/>
+		<Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Grid.Column="1" Margin="5,25,0,25" Grid.RowSpan="2">
+			<WebBrowser x:Name="mdView" Grid.Column="1" LoadCompleted="ViewLoaded" PreviewKeyDown="BeforeKeyDown"/>
+		</Border>
 
-    <Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Grid.Column="1" Margin="5,25,0,0">
-      <WebBrowser x:Name="mdView" Grid.Column="1" Margin="0"/>
-    </Border>
+		<GridSplitter x:Name="splitter" Width="5" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Grid.Column="1" HorizontalAlignment="Left" Grid.RowSpan="2"/>
 
-    <GridSplitter x:Name="splitter" Width="5" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Grid.Column="1" HorizontalAlignment="Left" Margin="0,25,0,0"/>
+		<Image Source="Images/markdown.png" Height="20" Width="20" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,2,0,0"/>
 
-    <Image Source="Images/markdown.png" Height="20" Width="20" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,2,0,0"/>
+		<Button Click="SelectSBFolder" ToolTip="Select Starbound installation folder..." Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right">
+			<Image Source="Images/directory.png"/>
+		</Button>
 
-    <Button Click="SelectSBFolder" ToolTip="Select Starbound installation folder..." Width="24" Height="24" Background="{x:Null}" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Grid.Column="0" VerticalAlignment="Top" HorizontalAlignment="Left">
-      <Image Source="Images/directory.png" Height="17" Width="20"/>
-    </Button>
+		<ListBox x:Name="mdList" SelectionChanged="FileSelected" HorizontalContentAlignment="Stretch" ItemTemplate="{DynamicResource mdFileTemplate}" ItemsSource="{Binding}" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+		<Slider x:Name="zoomSlider" ValueChanged="zoomChanged" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,42,0" VerticalAlignment="Bottom" RenderTransformOrigin="0.417,0.2"
+						Minimum="50" Maximum="250" Value="100" SmallChange="25" LargeChange="50" TickFrequency="50" TickPlacement="TopLeft" Width="96" Height="24" AutoToolTipPlacement="TopLeft"/>
+		<Button Click="ZoomUp" ToolTip="zoom in" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="24" Height="24" BorderBrush="{x:Null}" Background="{x:Null}" Margin="0,0,18,0">
+			<Image Source="Images/zoom_in.png"/>
+		</Button>
+		<Button Click="ZoomDown" ToolTip="zoom out" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="24" Height="24" Margin="0,0,136,0" Background="{x:Null}" BorderBrush="{x:Null}">
+			<Image Source="Images/zoom_out.png"/>
+		</Button>
 
-    <TextBlock Text="Help Files:" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="26,5,0,0"/>
-
-    <ListBox x:Name="mdList" SelectionChanged="FileSelected" HorizontalContentAlignment="Stretch" ItemTemplate="{DynamicResource mdFileTemplate}" ItemsSource="{Binding}" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Margin="0,25,0,0"/>
-  </Grid>
+		<TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="6,0,0,4" TextWrapping="Wrap" Text="Find in Document:"/>
+		<TextBox x:Name="searchBox" Grid.Column="1" Height="24" Padding="2" Margin="108,0,228,0" TextWrapping="Wrap" VerticalAlignment="Bottom" TextChanged="SearchTextChanged">
+			<TextBox.InputBindings>
+				<KeyBinding Command="{StaticResource Search}" Key="Enter"/>
+			</TextBox.InputBindings>
+		</TextBox>
+		<Button Grid.Column="1" Command="{StaticResource SearchNext}" ToolTip="jump to next result" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="24" Height="24" Margin="0,0,180,0" Background="{x:Null}" BorderBrush="{x:Null}">
+			<Image Source="Images/down.png"/>
+		</Button>
+		<Button Grid.Column="1" Command="{StaticResource SearchPrev}" ToolTip="jump to previous result" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="24" Height="24" Margin="0,0,204,0" Background="{x:Null}" BorderBrush="{x:Null}">
+			<Image Source="Images/up.png"/>
+		</Button>
+	</Grid>
 </Window>
