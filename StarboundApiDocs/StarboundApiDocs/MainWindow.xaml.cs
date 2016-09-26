@@ -216,8 +216,6 @@ namespace StarboundApiDocViewer {
 					searchBox.SelectAll();
 				}
 				e.Handled = e.Key != Key.C;
-			} else {
-				e.Handled = true;
 			}
 		}
 
