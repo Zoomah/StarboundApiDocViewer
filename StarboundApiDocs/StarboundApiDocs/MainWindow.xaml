@@ -45,7 +45,7 @@
 		<KeyBinding Key="Esc" Command="{StaticResource Clear}"/>
 	</Window.InputBindings>
 	
-	<Grid Margin="1" x:Name="mainGrid">
+	<Grid Margin="5" x:Name="mainGrid">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition x:Name="leftCol" Width="0.25*"/>
 			<ColumnDefinition x:Name ="rightCol" Width="0.75*"/>
@@ -53,23 +53,27 @@
 
 		<ListBox x:Name="mdList" SelectionChanged="FileSelected" HorizontalContentAlignment="Stretch" ItemTemplate="{DynamicResource mdFileTemplate}" ItemsSource="{Binding}" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
 
-		<GridSplitter x:Name="splitter" Width="5" Background="{DynamicResource {x:Static SystemColors.WindowBrushKey}}" Grid.Column="1" HorizontalAlignment="Left" Grid.RowSpan="2"/>
+		<GridSplitter x:Name="splitter" Width="10" Grid.Column="1" HorizontalAlignment="Left" Grid.RowSpan="2">
+			<GridSplitter.Background>
+				<ImageBrush Stretch="None" ImageSource="Images/splitter.png"/>
+			</GridSplitter.Background>
+		</GridSplitter>
 
-		<Image Source="Images/markdown.png" Height="20" Width="20" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,2,0,0"/>
+		<Image Source="Images/markdown.png" Height="20" Width="20" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,2,0,0"/>
 
-		<Label x:Name="mdCurrent" Content="no file selected" FontSize="14" FontWeight="Bold" Grid.Column="1" VerticalAlignment="Top"  Margin="30,2,29,0" Padding="0"/>
+		<Label x:Name="mdCurrent" Content="no file selected" FontSize="14" FontWeight="Bold" Grid.Column="1" VerticalAlignment="Top"  Margin="35,2,29,0" Padding="0"/>
 
 		<Button Click="SelectSBFolder" ToolTip="Select Starbound installation folder..." Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right">
 			<Image Source="Images/directory.png"/>
 		</Button>
 
-		<Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Grid.Column="1" Margin="5,25,0,25" Grid.RowSpan="2">
+		<Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Grid.Column="1" Margin="10,30,0,30" Grid.RowSpan="2">
 			<WebBrowser x:Name="mdView" Grid.Column="1" LoadCompleted="ViewLoaded" PreviewKeyDown="BeforeKeyDown"/>
 		</Border>
 
-		<TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="6,0,0,4" TextWrapping="Wrap" Text="Find in Document:"/>
+		<TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,4" TextWrapping="Wrap" Text="Find in Document:"/>
 
-		<TextBox x:Name="searchBox" Grid.Column="1" Height="24" Padding="2" Margin="108,0,228,0" TextWrapping="Wrap" VerticalAlignment="Bottom" TextChanged="SearchTextChanged">
+		<TextBox x:Name="searchBox" Grid.Column="1" Height="24" Padding="2" Margin="115,0,228,0" TextWrapping="Wrap" VerticalAlignment="Bottom" TextChanged="SearchTextChanged">
 			<TextBox.InputBindings>
 				<KeyBinding Command="{StaticResource Search}" Key="Enter"/>
 			</TextBox.InputBindings>
