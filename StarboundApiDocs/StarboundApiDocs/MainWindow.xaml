@@ -1,4 +1,4 @@
-﻿<Window Title="Starbound API Documentation Viewer" Height="480" Width="920" Icon="Images/sb.ico"
+﻿<Window Title="Starbound API Documentation Viewer" Height="480" Width="786" MinHeight="320" MinWidth="786" Icon="Images/sb.ico"
   
   xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
   xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -16,7 +16,7 @@
 					<ColumnDefinition Width="20"/>
 					<ColumnDefinition Width="Auto"/>
 				</Grid.ColumnDefinitions>
-				<Image Source="Images/markdown.png" Margin="0,0,3,0"/>
+				<Image Source="Images/file.png" Margin="0,0,3,0"/>
 				<TextBlock Grid.Column="1"  ToolTip="{Binding DisplayName}" TextWrapping="NoWrap"  Text="{Binding DisplayName}"/>
 			</Grid>
 		</DataTemplate>
@@ -27,7 +27,7 @@
 		<RoutedUICommand x:Key="SearchNext" Text=""/>
 		<RoutedUICommand x:Key="SearchPrev" Text=""/>
 	</Window.Resources>
-	
+
 	<!-- Codebindings for hotkeys -->
 	<Window.CommandBindings>
 		<CommandBinding Command="{StaticResource GotoSearch}" Executed="GotoSearch"/>
@@ -36,66 +36,74 @@
 		<CommandBinding Command="{StaticResource SearchNext}" Executed="SearchNext"/>
 		<CommandBinding Command="{StaticResource SearchPrev}" Executed="SearchPrev"/>
 	</Window.CommandBindings>
-	
+
 	<Window.InputBindings>
 		<KeyBinding Modifiers="Ctrl" Key="F" Command="{StaticResource GotoSearch}"/>
-		
+
 		<KeyBinding Key="F3" Command="{StaticResource SearchNext}"/>
 		<KeyBinding Modifiers="Shift" Key="F3" Command="{StaticResource SearchPrev}"/>
 		<KeyBinding Key="Esc" Command="{StaticResource Clear}"/>
 	</Window.InputBindings>
-	
+
 	<Grid Margin="5" x:Name="mainGrid">
 		<Grid.ColumnDefinitions>
 			<ColumnDefinition x:Name="leftCol" Width="0.25*"/>
 			<ColumnDefinition x:Name ="rightCol" Width="0.75*"/>
 		</Grid.ColumnDefinitions>
 
-		<ListBox x:Name="mdList" SelectionChanged="FileSelected" HorizontalContentAlignment="Stretch" ItemTemplate="{DynamicResource mdFileTemplate}" ItemsSource="{Binding}" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}"/>
+		<Image Source="Images/stack.png" Height="20" Width="20" Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="2,2,0,0" />
 
-		<GridSplitter x:Name="splitter" Width="10" Grid.Column="1" HorizontalAlignment="Left" Grid.RowSpan="2">
-			<GridSplitter.Background>
-				<ImageBrush Stretch="None" ImageSource="Images/splitter.png"/>
-			</GridSplitter.Background>
-		</GridSplitter>
+		<Label Content="Documents" FontSize="14" FontWeight="Bold" Grid.Column="0" VerticalAlignment="Top"  Margin="27,2,0,0" Padding="0"/>
 
-		<Image Source="Images/markdown.png" Height="20" Width="20" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="12,2,0,0"/>
+		<ListBox x:Name="mdList" SelectionChanged="FileSelected" HorizontalContentAlignment="Stretch" ItemTemplate="{DynamicResource mdFileTemplate}" ItemsSource="{Binding}" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Margin="0,30,0,0"/>
 
-		<Label x:Name="mdCurrent" Content="no file selected" FontSize="14" FontWeight="Bold" Grid.Column="1" VerticalAlignment="Top"  Margin="35,2,29,0" Padding="0"/>
+		<GridSplitter x:Name="splitter" Width="5" Grid.Column="1" HorizontalAlignment="Left" Background="{x:Null}"/>
+
+		<Image Source="Images/file.png" Height="20" Width="20" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="7,2,0,0"/>
+
+		<Label x:Name="mdCurrent" Content="no file selected" FontSize="14" FontWeight="Bold" Grid.Column="1" VerticalAlignment="Top"  Margin="32,2,29,0" Padding="0"/>
 
 		<Button Click="SelectSBFolder" ToolTip="Select Starbound installation folder..." Width="24" Height="24" Background="{x:Null}" BorderBrush="{x:Null}" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right">
-			<Image Source="Images/directory.png"/>
+			<Image Source="Images/folder.png"/>
 		</Button>
 
-		<Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Grid.Column="1" Margin="10,30,0,30" Grid.RowSpan="2">
+		<Border BorderThickness="1" BorderBrush="{DynamicResource {x:Static SystemColors.ActiveBorderBrushKey}}" Grid.Column="1" Margin="5,30,0,30" Grid.RowSpan="2">
 			<WebBrowser x:Name="mdView" Grid.Column="1" LoadCompleted="ViewLoaded" PreviewKeyDown="BeforeKeyDown"/>
 		</Border>
+		<Image Source="Images/search.png" Width="20" Height="20" Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="7,0,0,2"/>
 
-		<TextBlock Grid.Column="1" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,0,0,4" TextWrapping="Wrap" Text="Find in Document:"/>
-
-		<TextBox x:Name="searchBox" Grid.Column="1" Height="24" Padding="2" Margin="115,0,228,0" TextWrapping="Wrap" VerticalAlignment="Bottom" TextChanged="SearchTextChanged">
+		<TextBox x:Name="searchBox" ToolTip="enter search text\n\njump here with (Ctrl+F)" Grid.Column="1" Height="24" Padding="2,2,25,2" Margin="32,0,0,0" TextWrapping="Wrap" VerticalAlignment="Bottom" TextChanged="SearchTextChanged" HorizontalAlignment="Left" Width="328">
 			<TextBox.InputBindings>
 				<KeyBinding Command="{StaticResource Search}" Key="Enter"/>
 			</TextBox.InputBindings>
 		</TextBox>
-
-		<Button Grid.Column="1" Command="{StaticResource SearchPrev}" ToolTip="jump to previous result" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="24" Height="24" Margin="0,0,204,0" Background="{x:Null}" BorderBrush="{x:Null}">
-			<Image Source="Images/up.png"/>
+		<Button x:Name="clearButton" ToolTip="clear this field (Esc)" Panel.ZIndex="100" Visibility="Hidden" Command="{StaticResource Clear}" Grid.Column="1" Height="20" Width="20" HorizontalAlignment="Left"  VerticalAlignment="Bottom" Margin="338,0,0,2" Background="{x:Null}" BorderBrush="{x:Null}">
+			<Image Source="Images/cross.png"/>
 		</Button>
 
-		<Button Grid.Column="1" Command="{StaticResource SearchNext}" ToolTip="jump to next result" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="24" Height="24" Margin="0,0,180,0" Background="{x:Null}" BorderBrush="{x:Null}">
-			<Image Source="Images/down.png"/>
+		<Button Grid.Column="1" Command="{StaticResource SearchPrev}" ToolTip="jump to previous result (Shift+F3)" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="24" Height="24" Margin="361,0,0,0" Background="{x:Null}" BorderBrush="{x:Null}">
+			<Image Source="Images/prev.png"/>
 		</Button>
 
-		<Button Click="ZoomDown" ToolTip="zoom out" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="24" Height="24" Margin="0,0,136,0" Background="{x:Null}" BorderBrush="{x:Null}">
-			<Image Source="Images/zoom_out.png"/>
+		<Button Grid.Column="1" Command="{StaticResource SearchNext}" ToolTip="jump to next result (F3)" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="24" Height="24" Margin="384,0,0,0" Background="{x:Null}" BorderBrush="{x:Null}">
+			<Image Source="Images/next.png"/>
 		</Button>
 
-		<Slider x:Name="zoomSlider" ValueChanged="zoomChanged" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,42,0" VerticalAlignment="Bottom" RenderTransformOrigin="0.417,0.2"
-						Minimum="50" Maximum="250" Value="100" SmallChange="25" LargeChange="50" TickFrequency="50" TickPlacement="TopLeft" Width="96" Height="24" AutoToolTipPlacement="TopLeft"/>
+		<Button Click="ZoomOut" ToolTip="zoom out" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="24" Height="24" Margin="0,0,134,0" Background="{x:Null}" BorderBrush="{x:Null}">
+			<Image Source="Images/zoom-out.png"/>
+		</Button>
 
-		<Button Click="ZoomUp" ToolTip="zoom in" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="24" Height="24" BorderBrush="{x:Null}" Background="{x:Null}" Margin="0,0,18,0">
-			<Image Source="Images/zoom_in.png"/>
+		<Slider x:Name="zoomSlider" ValueChanged="zoomChanged" Grid.Column="1" HorizontalAlignment="Right" Margin="0,0,36,6" VerticalAlignment="Bottom" RenderTransformOrigin="0.417,0.2"
+						Minimum="50" Maximum="250" Value="100" SmallChange="25" LargeChange="50" TickFrequency="25" TickPlacement="TopLeft" Width="96" Height="24" IsSnapToTickEnabled="True">
+			<Slider.ToolTip>
+				<ToolTip Content="{Binding RelativeSource={RelativeSource Self},
+                               Path=PlacementTarget.Value}"
+             ContentStringFormat="Zoom: {0:0}%" />
+			</Slider.ToolTip>
+		</Slider>
+
+		<Button Click="ZoomIn" ToolTip="zoom in" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="24" Height="24" BorderBrush="{x:Null}" Background="{x:Null}" Margin="0,0,10,0">
+			<Image Source="Images/zoom-in.png"/>
 		</Button>
 	</Grid>
 </Window>
