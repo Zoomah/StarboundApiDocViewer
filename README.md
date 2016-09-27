@@ -1,4 +1,4 @@
-[Download Latest Release](/releases/latest)
+[Download Latest Release](https://github.com/Zoomah/StarboundApiDocViewer/releases/latest)
 
 # Starbound API Documentation Viewer
 
