@@ -1,8 +1,5 @@
-# StarboundApiDocs
+# Starbound API Documentation Viewer
 
-Viewer for Starbound API Documentation
-
-This project is still WIP
-
+This Viewer provides an easy to use interface to the modding help files of Starbound
 
 
