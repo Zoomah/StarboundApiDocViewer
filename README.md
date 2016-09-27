@@ -28,3 +28,8 @@ This Viewer provides an easy to use interface to the modding help files of Starb
 5. Jump to the previous match in the current document (`SHIFT + F3`)
 6. Jump to the next match in the current document (`F3`)
 7. Zoom controls
+
+## Requirements
+
+- Windows 7 or later
+- Microsoft .NET 4.6.2 [Download from Microsoft](https://www.microsoft.com/en-us/download/details.aspx?id=53344)
